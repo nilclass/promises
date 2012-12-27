@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 	// Promise
 	// =======
 	// EXPORTED
-	// Monadic function chaining around potentially asynchronous values
+	// Monadic function chaining around asynchronously-fulfilled values
 	// - better to use the `promise` function to construct
 	// - `then` and `except` functions must return a value to continue execution of the chain
 	// - if an exception is thrown within a `then` function, the promise will reject with the exception as its value
