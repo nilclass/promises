@@ -42,7 +42,11 @@ if (typeof window !== "undefined") {
 		try {
 			var value = fn.apply(p, [this.value].concat(args));
 			if (typeof value != 'undefined') {
-				p.fulfill(value);
+				if (value instanceof Error) {
+					p.reject(value);
+				} else {
+					p.fulfill(value);
+				}
 			}
 		}
 		catch (e) {
