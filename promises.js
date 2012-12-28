@@ -5,7 +5,9 @@
 var environment = {};
 if (typeof window !== "undefined") {
 	environment = window;
-}else if (typeof module !== "undefined") {
+} else if (typeof self !== "undefined") {
+	environment = self;
+} else if (typeof module !== "undefined") {
 	environment = module.exports;
 }
 
@@ -42,7 +44,11 @@ if (typeof window !== "undefined") {
 		try {
 			var value = fn.apply(p, [this.value].concat(args));
 			if (typeof value != 'undefined') {
-				p.fulfill(value);
+				if (value instanceof Error) {
+					p.reject(value);
+				} else {
+					p.fulfill(value);
+				}
 			}
 		}
 		catch (e) {
