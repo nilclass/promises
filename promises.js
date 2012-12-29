@@ -123,6 +123,19 @@ if (typeof window !== "undefined") {
 		}
 	};
 
+	// sets up the given promise to fulfill/reject upon the method-owner's fulfill/reject
+	Promise.prototype.chain = function(otherPromise) {
+		this.then(function(v) {
+			promise(otherPromise).fulfill(v);
+			return v;
+		});
+		this.except(function(err) {
+			promise(otherPromise).reject(err);
+			return err;
+		});
+		return otherPromise;
+	};
+
 	// promise creator
 	// - behaves like a guard, ensuring `v` is a promise
 	function promise(v) { return (v instanceof Promise) ? v : new Promise(v); }
