@@ -104,6 +104,38 @@ describe('promise', function() {
 			p.fulfill(1);
 		});
 	});
+	describe('fulfillOrReject()', function() {
+		it('should reject if parameter 1 is truthy', function(done) {
+			promise(1).then(function() {
+				this.fulfillOrReject("oh nooo");
+			})
+			.then(function() { assert(false); })
+			.except(function(err) {
+				assert(err.message == "oh nooo");
+				done();
+			});
+		});
+		it('should fulfill if parameter 1 is falsey', function(done) {
+			promise(1).then(function() {
+				this.fulfillOrReject(false, "oh yeaah");
+			})
+			.except(function() { assert(false); })
+			.then(function(v) {
+				assert(v == "oh yeaah");
+				done();
+			});
+		});
+		it('should fulfill if no parameters are defined', function(done) {
+			promise(1).then(function() {
+				this.fulfillOrReject();
+			})
+			.except(function() { assert(false); })
+			.then(function(v) {
+				assert(v === null);
+				done();
+			});
+		});
+	});
 	describe('promise chain()ing', function() {
 		it('should cause upstream fulfillment to pass down the chain', function(done) {
 			var p1 = promise(), p2 = promise();

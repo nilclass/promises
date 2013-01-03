@@ -116,6 +116,16 @@ if (typeof window !== "undefined") {
 		}
 	};
 
+	// works as `fulfill` and `reject` do, but decides based on whether `err` is truthy
+	// - for use with the (err, result) callback pattern that's often used in nodejs
+	Promise.prototype.fulfillOrReject = function(err, value) {
+		if (err) {
+			return this.reject(err);
+		} else {
+			return this.fulfill((typeof value == 'undefined') ? null : value);
+		}
+	};
+
 	// sets up the given promise to fulfill/reject upon the method-owner's fulfill/reject
 	Promise.prototype.chain = function(otherPromise) {
 		this.then(function(v) {
