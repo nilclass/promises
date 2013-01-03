@@ -64,3 +64,13 @@ promise(10)
 	.then(log);
 // => waits 1 second, then logs "5"
 ```
+
+Promises may be chained, to allow the fulfillment or rejection of one to be passed on to the other:
+
+```javascript
+var p1 = promise(), p2 = promise();
+p2.then(log).except(log);
+p1.chain(p2);
+p1.fulfill('foobar');
+// => logs "foobar"
+```

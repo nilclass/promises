@@ -104,6 +104,28 @@ describe('promise', function() {
 			p.fulfill(1);
 		});
 	});
+	describe('promise chain()ing', function() {
+		it('should cause upstream fulfillment to pass down the chain', function(done) {
+			var p1 = promise(), p2 = promise();
+			p2.then(function(v) {
+				assert(v == 'foobar');
+				done();
+			});
+			p2.except(function() { assert(false); });
+			p1.chain(p2);
+			p1.fulfill('foobar');
+		});
+		it('should cause upstream rejection to pass down the chain', function(done) {
+			var p1 = promise(), p2 = promise();
+			p2.except(function(v) {
+				assert(v.message == 'foobar');
+				done();
+			});
+			p2.then(function() { assert(false); });
+			p1.chain(p2);
+			p1.reject('foobar');
+		});
+	});
 	describe('the promise() constructor', function() {
 		it('should create a promise out of a non-promise', function(done) {
 			promise('foobar').then(function(v) { assert(v == 'foobar'); done(); });
