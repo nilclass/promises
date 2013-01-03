@@ -74,3 +74,23 @@ p1.chain(p2);
 p1.fulfill('foobar');
 // => logs "foobar"
 ```
+
+If a promise is not going to continue the chain, and wants to release the references held by downstream promises, it may call cancel:
+
+```javascript
+mypromise
+  .then(function(canStop) {
+    if (canStop) {
+      // program logic says we're done
+      console.log('stopping');
+      this.cancel();
+    } else {
+      return 'foobar';
+    }
+  })
+  .then(function(v) {
+    console.log(v);
+  });
+mypromise.fulfill(true);
+// => logs "stopping"
+```

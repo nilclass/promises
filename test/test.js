@@ -136,6 +136,18 @@ describe('promise', function() {
 			});
 		});
 	});
+	describe('cancel()', function() {
+		it('should release references of downstream promises', function() {
+			var p1 = promise();
+			var p2 = p1.then(function() { assert(false); });
+			p2.then(function() { assert(false); });
+			p1.cancel();
+			assert(p1.fulfillCBs.length === 0);
+			assert(p1.exceptCBs.length === 0);
+			assert(p2.fulfillCBs.length === 0);
+			assert(p2.exceptCBs.length === 0);
+		});
+	});
 	describe('promise chain()ing', function() {
 		it('should cause upstream fulfillment to pass down the chain', function(done) {
 			var p1 = promise(), p2 = promise();

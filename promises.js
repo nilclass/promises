@@ -24,8 +24,8 @@ if (typeof window !== "undefined") {
 	// - `then` and `except` functions are called with `this` bound to the new promise
 	//   this allows asyncronous fulfillment/rejection with `this.fulfill` and `this.reject`
 	function Promise(value) {
-		this.fulfillCBs = [];
-		this.exceptCBs = [];
+		this.fulfillCBs = []; // used to notify about fulfillments
+		this.exceptCBs = []; // used to notify about rejections
 		this.value = undefined;
 		if (value) {
 			if (value instanceof Error) {
@@ -124,6 +124,23 @@ if (typeof window !== "undefined") {
 		} else {
 			return this.fulfill((typeof value == 'undefined') ? null : value);
 		}
+	};
+
+	// releases all of the remaining references in the prototype chain
+	// - to be used in situations where promise handling will not continue, and memory needs to be freed
+	Promise.prototype.cancel = function() {
+		// propagate the command to promises later in the chain
+		for (var i=0; i < this.fulfillCBs.length; i++) {
+			var cb = this.fulfillCBs[i];
+			cb.p.cancel();
+		}
+		for (var i=0; i < this.exceptCBs.length; i++) {
+			var cb = this.exceptCBs[i];
+			cb.p.cancel();
+		}
+		// free up memory
+		this.fulfillCBs.length = 0;
+		this.exceptCBs.length = 0;
 	};
 
 	// sets up the given promise to fulfill/reject upon the method-owner's fulfill/reject
