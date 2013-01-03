@@ -69,7 +69,7 @@ describe('promise', function() {
 				return 2;
 			})
 			.then(function(v) {
-				throw "oh nooo";
+				this.reject("oh nooo");
 			})
 			.except(function(err) {
 				assert(err.message == "oh nooo");
@@ -89,7 +89,7 @@ describe('promise', function() {
 				return 2;
 			})
 			.then(function(v) {
-				throw "oh nooo";
+				return new Error("oh nooo");
 			})
 			.except(function(err) {
 				assert(err.message == "oh nooo");

@@ -38,12 +38,12 @@ promise.fulfill(5);
 // => logs "6" after a 1-second delay
 ```
 
-If an exception is thrown during the syncronous execution of a `then` function, it will use that to reject.
+If an `Error` type or subtype is returned, the promise will use that to reject.
 
 ```javascript
 var myPromise = promise();
 myPromise.then(function(v) {
-	throw "Oh noooo";
+	return new Error("Oh noooo");
 }).except(log);
 promise.fulfill(5);
 // => logs "Error: Oh noooo"

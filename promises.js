@@ -41,22 +41,14 @@ if (typeof window !== "undefined") {
 
 	// helper function to execute `then` or `except` functions
 	function doThen(p, fn, args) {
-		// :DEBUG: exception-catching temporarily disabled pending annoyance review
-		// try {
-			var value = fn.apply(p, [this.value].concat(args));
-			if (typeof value != 'undefined') {
-				if (value instanceof Error) {
-					p.reject(value);
-				} else {
-					p.fulfill(value);
-				}
+		var value = fn.apply(p, [this.value].concat(args));
+		if (typeof value != 'undefined') {
+			if (value instanceof Error) {
+				p.reject(value);
+			} else {
+				p.fulfill(value);
 			}
-		// }
-		// catch (e) {
-		// 	var err = e;
-		// 	if (!(err instanceof Error)) { err = new Error(e); }
-		// 	p.reject(err);
-		// }
+		}
 	}
 
 	// add a 'non-error' function to the sequence
