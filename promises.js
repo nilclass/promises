@@ -98,6 +98,7 @@ if (typeof window !== "undefined") {
 			this.fulfillCBs.length = 0;
 			this.exceptCBs.length = 0;
 		}
+		return this;
 	};
 
 	// sets the promise value, enters 'error' mode, and executes any queued `except` functions
@@ -114,6 +115,7 @@ if (typeof window !== "undefined") {
 			this.fulfillCBs.length = 0;
 			this.exceptCBs.length = 0;
 		}
+		return this;
 	};
 
 	// works as `fulfill` and `reject` do, but decides based on whether `err` is truthy
@@ -141,6 +143,7 @@ if (typeof window !== "undefined") {
 		// free up memory
 		this.fulfillCBs.length = 0;
 		this.exceptCBs.length = 0;
+		return this;
 	};
 
 	// sets up the given promise to fulfill/reject upon the method-owner's fulfill/reject
