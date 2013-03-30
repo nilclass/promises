@@ -178,5 +178,48 @@ describe('promise', function() {
 			var p = promise('foobar');
 			promise(p).then(function(v) { assert(v == 'foobar'); done(); });
 		});
+		it('should create a group promise when multiple values are given', function(done) {
+			var p1 = promise();
+			var p2 = promise();
+			var p3 = promise();
+			promise(p1,p2,p3)
+				.then(function(v) {
+					assert(v[0] === 1);
+					assert(v[1] === 2);
+					assert(v[2] === 3);
+					done();
+				});
+			p1.fulfill(1);
+			p2.fulfill(2);
+			p3.fulfill(3);
+		});
+		it('should correctly handle groups with some fulfilled', function(done) {
+			var p1 = promise(1);
+			var p2 = promise();
+			var p3 = promise(3);
+			promise(p1,p2,p3)
+				.then(function(v) {
+					assert(v[0] === 1);
+					assert(v[1] === 2);
+					assert(v[2] === 3);
+					done();
+				});
+			p2.fulfill(2);
+		});
+		it('should fulfill if any except', function(done) {
+			var p1 = promise();
+			var p2 = promise();
+			var p3 = promise();
+			promise(p1,p2,p3)
+				.then(function(v) {
+					assert(v[0] === 1);
+					assert(v[1].message == 2);
+					assert(v[2] === 3);
+					done();
+				});
+			p1.fulfill(1);
+			p2.reject(2);
+			p3.fulfill(3);
+		});
 	});
 });
