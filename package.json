@@ -4,5 +4,7 @@
 	"author":"Paul Frazee <pfrazee@gmail.com>",
 	"description":"Promises the way I like em",
 	"main":"./promises.js",
-	"repository":{"type":"git","url":"https://github.com/pfraze/promises.git"}
+	"repository":{"type":"git","url":"https://github.com/pfraze/promises.git"},
+  "devDependencies": { "promises-aplus-tests": "*" },
+  "scripts": { "test": "node test/promises-aplus-compliance.js" }
 }
